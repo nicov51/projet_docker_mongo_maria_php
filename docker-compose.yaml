@@ -1,0 +1,56 @@
+# ./docker-compose.yml
+version: '3.8'
+
+services:
+
+  server:
+    build:
+      context: .
+      dockerfile: ./automation/docker/Dockerfile
+    container_name: blog-server
+    volumes:
+      - ./:/var/www/html
+    links:
+      - db
+    ports:
+      - 80:80
+
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+#  mysql:
+#    image: docker${DB_VERSION:-10.4}
+#    container_name: db_ecf
+#    environment:
+#      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-toor}
+#      MYSQL_DATABASE: ${DB_DATABASE:-app}
+#      MYSQL_USER: ${DB_USER:-user}
+#      MYSQL_PASSWORD: ${DB_PASSWORD:-resu}
+#    ports:
+#        - ${DB_PORT:-3306}:${DB_PORT:-3306}
+
+
+  mongodb:
+        image: docker.io/bitnami/mongodb:7.0
+        ports:
+          - "27017:27017"
+        volumes:
+          - 'mongodb_data:/bitnami/mongodb'
+
+volumes:
+  mongodb_data:
+   driver: local
+
+
+
+
+
+
